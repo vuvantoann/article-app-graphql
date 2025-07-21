@@ -34,5 +34,43 @@ export const resolversUser = {
         }
       }
     },
+
+    loginUser: async (_, args) => {
+      const { user } = args
+
+      const infoUser = await User.findOne({
+        email: user.email,
+        deleted: false,
+      })
+      if (!infoUser) {
+        return {
+          code: 400,
+          message: 'Email không tồn tại',
+        }
+      }
+
+      if (infoUser.password != md5(user.password)) {
+        return {
+          code: 400,
+          message: 'Sai mật khẩu',
+        }
+      }
+
+      if (infoUser.status === 'inactive') {
+        return {
+          code: 400,
+          message: 'Tài khoản đã bị khóa',
+        }
+      }
+
+      return {
+        code: 200,
+        message: 'Đăng nhập thành công',
+        id: infoUser.id,
+        fullName: infoUser.fullName,
+        email: infoUser.email,
+        token: infoUser.token,
+      }
+    },
   },
 }
