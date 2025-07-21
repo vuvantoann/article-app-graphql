@@ -3,10 +3,18 @@ import Article from '../models/task.model'
 
 export const resolversArticle = {
   Query: {
-    getListArticle: async () => {
+    getListArticle: async (_, args) => {
+      const { sortKey, sortValue } = args
+
+      // sắp xếp theo tiêu chí
+      let sort = {}
+      if (sortKey && sortValue) {
+        sort[sortKey] = sortValue
+      }
+      // kết thúc
       const articles = await Article.find({
         deleted: false,
-      })
+      }).sort(sort)
 
       return articles
     },
