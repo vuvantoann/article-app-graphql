@@ -4,7 +4,7 @@ import Article from '../models/task.model'
 export const resolversArticle = {
   Query: {
     getListArticle: async (_, args) => {
-      const { sortKey, sortValue } = args
+      const { sortKey, sortValue, currentPage, limitItem } = args
 
       // sắp xếp theo tiêu chí
       let sort = {}
@@ -12,9 +12,16 @@ export const resolversArticle = {
         sort[sortKey] = sortValue
       }
       // kết thúc
+
+      // phân trang
+      const skip = (currentPage - 1) * limitItem
+      // kết thúc
       const articles = await Article.find({
         deleted: false,
-      }).sort(sort)
+      })
+        .sort(sort)
+        .limit(limitItem)
+        .skip(skip)
 
       return articles
     },
