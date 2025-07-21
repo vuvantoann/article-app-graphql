@@ -11,6 +11,7 @@ export const resolversArticle = {
         limitItem,
         filterKey,
         filterValue,
+        keyword,
       } = args
       const find = {
         deleted: false,
@@ -31,7 +32,13 @@ export const resolversArticle = {
         find[filterKey] = filterValue
       }
       // end
+      if (keyword) {
+        const keywordRegex = new RegExp(keyword, 'i')
+        find['title'] = keywordRegex
+      }
+      // tìm kiếm
 
+      // kết thúc
       const articles = await Article.find(find)
         .sort(sort)
         .limit(limitItem)

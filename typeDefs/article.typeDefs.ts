@@ -16,6 +16,7 @@ export const typeDefsArticle = gql`
       limitItem: Int = 4
       filterKey: String
       filterValue: String
+      keyword: String
     ): [Article]
     getArticle(id: ID): Article
   }
