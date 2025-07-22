@@ -13,7 +13,7 @@ const startServer = async () => {
   const port: string | number = process.env.PORT || 3000
 
   //graphql
-  app.use('/graphql', requireAuth)
+  //app.use('/graphql', requireAuth)
   const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
