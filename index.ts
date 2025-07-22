@@ -4,6 +4,7 @@ import * as database from './config/database'
 import { ApolloServer } from 'apollo-server-express'
 import { typeDefs } from './typeDefs/index.typeDefs'
 import { resolvers } from './resolvers/index.resolver'
+import { requireAuth } from './middlewares/auth.middleware'
 
 const startServer = async () => {
   dotenv.config()
@@ -12,10 +13,13 @@ const startServer = async () => {
   const port: string | number = process.env.PORT || 3000
 
   //graphql
-
+  app.use('/graphql', requireAuth)
   const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
+    context: ({ req }) => {
+      return { ...req }
+    },
   })
 
   await apolloServer.start()
